@@ -15,32 +15,51 @@ type Message struct {
 	msg string
 }
 
-func FileServer(w http.ResponseWriter, r *http.Request) {
+func HandleChatRoot(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-
-	// Check if the id is valid, else 404, 301 to the new URL, etc - goes here!
-	// (this is where you'd look up the SHA-1 hash)
-
-	// Assuming it's valid
 	file := vars["filename"]
 	// Logging for the example
-	//log.Println(file)
-	fmt.Println("file: %s", file)
+	filename := "./web/" + file
+	http.ServeFile(w, r, filename)
+}
 
-	// Logging for the example
-	//log.Println(file)
+func HandleChatFolder(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 
-	// Super simple. Doesn't set any cache headers, check existence, avoid race conditions, etc.
+	file := vars["filename"]
+	folder := vars["folder"]
 
-	//dir := flag.String("directory", "web/", "directory of web files")
-	//flag.Parse()
-	//fs := http.Dir(*dir)
-	//fileHandler := http.FileServer(fs)
+	filename := "./web/" + folder + "/" + file
+	fmt.Println("filename: %s", filename)
+	log.Println(filename)
 
-	//w.Header().Set("Content-Type", "text/html")
-	//fileHandler.ServeHTTP(w, r)
-	//http.ServeFile(w, r, fileHandler.ServeHTTP())
-	filename := "C:/GoProjects/src/github.com/jonreardon/chatpubsub/web/" + file
+	http.ServeFile(w, r, filename)
+}
+
+func HandleBowerFolder(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	file := vars["filename"]
+	component := vars["component"]
+
+	filename := "./web/bower_components/" + component + "/" + file
+	fmt.Println("filename: %s", filename)
+	log.Println(filename)
+
+	http.ServeFile(w, r, filename)
+}
+
+func HandleBootstrapFolder(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	file := vars["filename"]
+	folder := vars["folder"]
+	dist := vars["dist"]
+
+	filename := "./web/bower_components/" + dist + "/" + folder + "/" + file
+	fmt.Println("filename: %s", filename)
+	log.Println(filename)
+
 	http.ServeFile(w, r, filename)
 }
 
@@ -63,7 +82,11 @@ func main() {
 
 	router.HandleFunc("/specular/pub/{topic}", api.PubMessageHandler).Methods("GET")
 	router.HandleFunc("/specular/{topic}", api.SubMessageHandler).Methods("GET")
-	router.HandleFunc("/chat/{filename}", FileServer).Methods("GET")
+
+	router.HandleFunc("/chat/{filename}", HandleChatRoot).Methods("GET")
+	router.HandleFunc("/chat/{folder}/{filename}", HandleChatFolder).Methods("GET")
+	router.HandleFunc("/chat/bower_components/{component}/{filename}", HandleBowerFolder).Methods("GET")
+	router.HandleFunc("/chat/bower_components/bootstrap/{dist}/{folder}/{filename}", HandleBootstrapFolder).Methods("GET")
 
 	log.Printf("Running on port %d\n", *port)
 

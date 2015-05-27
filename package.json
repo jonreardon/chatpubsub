@@ -6,6 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonreardon/chatpubsub.git"
+  },
   "keywords": [
     "Chat",
     "Pub",
@@ -15,5 +19,8 @@
     "WebSocket"
   ],
   "author": "Jon Reardon",
-  "license": "CSI"
+  "license": "CSI",
+  "devDependencies": {
+    "stylus": "^0.51.1"
+  }
 }
