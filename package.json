@@ -1,0 +1,19 @@
+{
+  "name": "chatpubsub",
+  "version": "1.0.0",
+  "description": "Standalone chat",
+  "main": "./web/chatpubsub.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Chat",
+    "Pub",
+    "Sub",
+    "AngularJS",
+    "Gorilla",
+    "WebSocket"
+  ],
+  "author": "Jon Reardon",
+  "license": "CSI"
+}
